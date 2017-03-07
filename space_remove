@@ -1,0 +1,24 @@
+#!/usr/bin/env python
+import os
+import re
+
+def rename(path):
+    for file in os.listdir(path):
+        fname = os.path.join(path, file)
+        if os.path.isdir(fname):
+            rename(fname)
+        renamefile(path, file)
+
+def renamefile(path, file):
+    newname = re.sub('[^a-zA-Z0-9._-]+', '_', file)
+    newname = re.sub('_-_', '-', newname)
+    newname = re.sub('[_-]{2,}', '_', newname)
+    newname = re.sub('[_-]+$', '', newname)
+    newname = re.sub('^[_-]+', '', newname)
+    if newname != file:
+        #print os.path.join(path, file), os.path.join(path, newname)
+        os.rename(os.path.join(path, file), os.path.join(path, newname))
+
+
+if __name__ == '__main__':
+    rename('.')
